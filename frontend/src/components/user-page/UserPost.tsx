@@ -99,7 +99,7 @@ const UserPost = ({
                     </Flex>
                 </Flex>
             </Link>
-            <Divider my={4} />â
+            <Divider my={4} />
         </>
     )
 }

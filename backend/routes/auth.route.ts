@@ -1,5 +1,6 @@
 import express, { Request, Response } from 'express'
 import passport from 'passport'
+import { login, signup, logout } from '../controllers/auth.controller'
 
 const router = express.Router()
 
@@ -12,7 +13,7 @@ router.get(
     },
 )
 
-router.get('/google', passport.authenticate('google', { scope: ['profile'] }))
+router.get('/google', passport.authenticate('google', { scope: ['profile', 'email'] }))
 router.get(
     '/google/callback',
     passport.authenticate('google', { failureRedirect: '/login' }),
@@ -20,5 +21,10 @@ router.get(
         res.redirect('http://localhost:3000')
     },
 )
+
+// login username and password
+router.post('/signup', signup)
+router.post('/login', login)
+router.post('/logout', logout)
 
 export default router

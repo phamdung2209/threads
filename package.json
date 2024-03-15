@@ -29,6 +29,8 @@
         "passport-google-oauth20": "^2.0.0"
     },
     "devDependencies": {
+        "@types/bcryptjs": "^2.4.6",
+        "@types/jsonwebtoken": "^9.0.6",
         "nodemon": "^3.1.0",
         "ts-node": "^10.9.2"
     }
