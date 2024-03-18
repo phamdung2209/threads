@@ -1,6 +1,7 @@
 import { Request, Response } from 'express'
 import User, { IUserDocument } from '../models/user.model'
-import Post from '../models/post.model'
+import Post, { IPostDocument } from '../models/post.model'
+import mongoose from 'mongoose'
 
 export const getPostById = async (req: Request, res: Response) => {
     try {
@@ -53,6 +54,28 @@ export const create = async (req: Request, res: Response) => {
         res.json({ message: 'Post created successfully' })
     } catch (error: any) {
         console.log('Error in create (post.controller.ts): ', error.message)
+        res.json({ error: error.message })
+    }
+}
+
+export const likeAndUnlike = async (req: Request, res: Response) => {
+    try {
+        const { id: postId } = req.params as { id: string }
+        const { _id: userId } = req.user as { _id: string }
+
+        const post: IPostDocument | null = await Post.findById(postId)
+        if (!post) return res.json({ error: 'Post not found' })
+
+        const userLikedPost = post.likes.toString().includes(userId.toString())
+        if (userLikedPost) {
+            await Post.findByIdAndUpdate(postId, { $pull: { likes: userId } })
+            return res.json({ message: 'Post unliked' })
+        } else {
+            await Post.findByIdAndUpdate(postId, { $push: { likes: userId } })
+            return res.json({ message: 'Post liked' })
+        }
+    } catch (error: any) {
+        console.log('Error in likeAndUnlike (post.controller.ts): ', error.message)
         res.json({ error: error.message })
     }
 }

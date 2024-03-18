@@ -1,10 +1,10 @@
 import mongoose from 'mongoose'
 
-export interface TPostDocument extends mongoose.Document {
+export interface IPostDocument extends mongoose.Document {
     postedBy: mongoose.Schema.Types.ObjectId
     text: string
     image?: string
-    likes: number
+    likes: mongoose.Schema.Types.ObjectId[]
     replies: {
         userId: string
         text: string
@@ -15,7 +15,7 @@ export interface TPostDocument extends mongoose.Document {
     updatedAt: Date
 }
 
-const postSchema: mongoose.Schema = new mongoose.Schema<TPostDocument>(
+const postSchema: mongoose.Schema = new mongoose.Schema<IPostDocument>(
     {
         postedBy: {
             type: mongoose.Schema.Types.ObjectId,
@@ -30,8 +30,9 @@ const postSchema: mongoose.Schema = new mongoose.Schema<TPostDocument>(
             type: String,
         },
         likes: {
-            type: Number,
-            default: 0,
+            type: [mongoose.Schema.Types.ObjectId],
+            ref: 'User',
+            default: [],
         },
         replies: [
             {
@@ -57,5 +58,5 @@ const postSchema: mongoose.Schema = new mongoose.Schema<TPostDocument>(
     { timestamps: true },
 )
 
-const Post: mongoose.Model<TPostDocument> = mongoose.models.Post ?? mongoose.model('Post', postSchema)
+const Post: mongoose.Model<IPostDocument> = mongoose.models.Post ?? mongoose.model('Post', postSchema)
 export default Post
