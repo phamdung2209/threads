@@ -9,7 +9,7 @@ export interface IPostDocument extends mongoose.Document {
         userId: string
         text: string
         userProfilePic?: string
-        userName: string
+        username: string
     }[]
     createdAt: Date
     updatedAt: Date
@@ -48,7 +48,7 @@ const postSchema: mongoose.Schema = new mongoose.Schema<IPostDocument>(
                 userProfilePic: {
                     type: String,
                 },
-                userName: {
+                username: {
                     type: String,
                     required: true,
                 },

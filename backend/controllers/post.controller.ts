@@ -79,3 +79,33 @@ export const likeAndUnlike = async (req: Request, res: Response) => {
         res.json({ error: error.message })
     }
 }
+
+export const replyPost = async (req: Request, res: Response) => {
+    try {
+        const { id: postId } = req.params as { id: string }
+        const { text } = req.body as { text: string }
+        const { _id: userId, profilePic, username } = req.user as { _id: string; profilePic: string; username: string }
+
+        if (!text) return res.json({ error: 'Content is required' })
+
+        const post: IPostDocument | null = await Post.findById(postId)
+        if (!post) return res.json({ error: 'Post not found' })
+
+        const newReply = {
+            userId,
+            text,
+            userProfilePic: profilePic,
+            username,
+        }
+        console.log('newReply: ', newReply)
+
+        await Post.findByIdAndUpdate(postId, { $push: { replies: newReply } })
+        // post.replies.push(newReply)
+        // await post.save()
+
+        res.json({ message: 'Replied to post successfully' })
+    } catch (error: any) {
+        console.log('Error in replyPost (post.controller.ts): ', error.message)
+        res.json({ error: error.message })
+    }
+}
