@@ -1,7 +1,6 @@
 import { Request, Response } from 'express'
 import User, { IUserDocument } from '../models/user.model'
 import Post, { IPostDocument } from '../models/post.model'
-import mongoose from 'mongoose'
 
 export const getPostById = async (req: Request, res: Response) => {
     try {
@@ -97,7 +96,6 @@ export const replyPost = async (req: Request, res: Response) => {
             userProfilePic: profilePic,
             username,
         }
-        console.log('newReply: ', newReply)
 
         await Post.findByIdAndUpdate(postId, { $push: { replies: newReply } })
         // post.replies.push(newReply)
@@ -106,6 +104,23 @@ export const replyPost = async (req: Request, res: Response) => {
         res.json({ message: 'Replied to post successfully' })
     } catch (error: any) {
         console.log('Error in replyPost (post.controller.ts): ', error.message)
+        res.json({ error: error.message })
+    }
+}
+
+export const getFeedPosts = async (req: Request, res: Response) => {
+    try {
+        const { _id: userId } = req.user as { _id: string }
+        const user: IUserDocument | null = await User.findById(userId)
+        if (!user) return res.json({ error: 'User not found' })
+
+        const following = user.following
+
+        const feedPosts = await Post.find({ postedBy: { $in: following } }).sort({ createdAt: -1 })
+
+        res.json(feedPosts)
+    } catch (error: any) {
+        console.log('Error in getFeedPosts (post.controller.ts): ', error.message)
         res.json({ error: error.message })
     }
 }
