@@ -12,50 +12,21 @@ import {
     useColorModeValue,
 } from '@chakra-ui/react'
 
+import Auth from '../components/Auth'
 import config from '../configs'
 import { OAuthButtonGroup } from '../components/signup-card/OAuthButtonGroup'
-import Auth from '../components/Auth'
 import { Link } from 'react-router-dom'
-import toast from 'react-hot-toast'
-import useLogin from '../hooks/useLogin'
-import { useState } from 'react'
-import { Loader } from '../assets/icons'
 
-const Login = () => {
-    const [valueLogin, setValueLogin] = useState<{
-        username: string
-        email: string
-        password: string
-    }>({
-        username: '',
-        email: '',
-        password: '',
-    })
-    const { loading, login } = useLogin()
-
-    const handleLogin = async () => {
-        try {
-            await login({
-                username: valueLogin.username || valueLogin.email,
-                email: valueLogin.email || valueLogin.username,
-                password: valueLogin.password,
-                confirmPassword: valueLogin.password,
-            })
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        } catch (error: any) {
-            toast.error(error.message)
-        }
-    }
-
+const Signup = () => {
     return (
         <Auth>
             <Stack spacing="6">
                 <Stack spacing={{ base: '2', md: '3' }} textAlign="center">
-                    <Heading size={{ base: 'xs', md: 'sm' }}>Log in with your Threads account</Heading>
+                    <Heading size={{ base: 'xs', md: 'sm' }}>Sign up with your Threads account</Heading>
                     <Text color="fg.muted">
-                        Don't have an account?{' '}
-                        <Link to={config.routes.signup} className="text-[#42a5f5] hover:underline">
-                            Sign up
+                        Already have an account?{' '}
+                        <Link to={config.routes.login} className="text-[#42a5f5] hover:underline">
+                            Log in
                         </Link>
                     </Text>
                 </Stack>
@@ -81,10 +52,6 @@ const Login = () => {
                                 _focusWithin={{
                                     boxShadow: useColorModeValue('', '0 0 0 1px #f3f5f726'),
                                 }}
-                                value={valueLogin.username}
-                                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                                    setValueLogin({ ...valueLogin, username: e.target.value })
-                                }
                             />
                             <Input
                                 border={'none'}
@@ -103,10 +70,6 @@ const Login = () => {
                                 _focusWithin={{
                                     boxShadow: useColorModeValue('', '0 0 0 1px #f3f5f726'),
                                 }}
-                                value={valueLogin.password}
-                                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                                    setValueLogin({ ...valueLogin, password: e.target.value })
-                                }
                             />
                         </FormControl>
                     </Stack>
@@ -128,10 +91,9 @@ const Login = () => {
                             _hover={{ opacity: 1 }}
                             cursor={'not-allowed'}
                             _active={{ opacity: 1 }}
-                            disabled={loading}
-                            onClick={handleLogin}
+                            disabled={true}
                         >
-                            {loading ? <Loader className="animate-spin size-7 text-gray-600" /> : 'Log In'}
+                            Sign up
                         </Button>
                         <HStack>
                             <Divider />
@@ -148,4 +110,4 @@ const Login = () => {
     )
 }
 
-export default Login
+export default Signup

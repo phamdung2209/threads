@@ -3,9 +3,11 @@ import ReactDOM from 'react-dom/client'
 import { ChakraProvider, ColorModeScript, extendTheme } from '@chakra-ui/react'
 import { mode } from '@chakra-ui/theme-tools'
 import { BrowserRouter as Router } from 'react-router-dom'
+import { Toaster } from 'react-hot-toast'
 
 import App from './App.tsx'
 import './index.scss'
+import { RecoilRoot } from 'recoil'
 
 interface StyleProps {
     color: string
@@ -37,11 +39,14 @@ const theme = extendTheme({ config, colors, styles: style })
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
     <React.StrictMode>
-        <Router>
-            <ChakraProvider theme={theme}>
-                <ColorModeScript initialColorMode={theme.config.initialColorMode} />
-                <App />
-            </ChakraProvider>
-        </Router>
+        <RecoilRoot>
+            <Router>
+                <ChakraProvider theme={theme}>
+                    <ColorModeScript initialColorMode={theme.config.initialColorMode} />
+                    <App />
+                </ChakraProvider>
+            </Router>
+            <Toaster />
+        </RecoilRoot>
     </React.StrictMode>,
 )
