@@ -1,6 +1,7 @@
 import { Request, Response } from 'express'
 import User, { IUserDocument } from '../models/user.model'
 import bcrypt from 'bcryptjs'
+import jwt from 'jsonwebtoken'
 
 import hashPassword from '../utils/hassedPassword'
 import generateJwt from '../utils/generateJwt'
@@ -105,6 +106,27 @@ export const logout = async (req: Request, res: Response) => {
         })
     } catch (error: any) {
         console.log('Error in logout (user.controller.ts): ', error.message)
+        res.json({ error: error.message })
+    }
+}
+
+export const authMe = async (req: Request, res: Response) => {
+    try {
+        const { _auth: token } = req.cookies as { _auth: string }
+        if (!token) return res.json({ error: 'Unauthorized - No Token Provided' })
+
+        const decoded = jwt.verify(token, process.env.JWT_SECRET as string)
+        if (!decoded) return res.json({ error: 'Unauthorized - Invalid Token' })
+
+        // const { _id: userId } = req.user as { _id: string }
+        // const user: IUserDocument | null = await User.findById(userId)
+        // if (!user) return res.json({ error: 'Unauthorized' })
+        const user = await User.findById((decoded as { _id: string })._id).select('-password')
+        if (!user) return res.json({ error: 'Unauthorized' })
+
+        res.json(user)
+    } catch (error: any) {
+        console.log('Error in authMe (user.controller.ts): ', error.message)
         res.json({ error: error.message })
     }
 }

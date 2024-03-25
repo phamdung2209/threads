@@ -5,6 +5,7 @@ const Auth = ({ children }: { children: Readonly<React.ReactNode> }) => {
         <Container
             w={'full'}
             h={'100vh'}
+            overflow={'auto'}
             minH={520}
             position={'relative'}
             className="flex align-items-center justify-center mx-auto"

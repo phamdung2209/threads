@@ -1,39 +1,15 @@
-import { Container } from '@chakra-ui/react'
-import { Route, Routes } from 'react-router-dom'
-import React, { Fragment } from 'react'
+import { useRecoilValue } from 'recoil'
 
-import { publicRoutes } from './routes'
-import Layouts from './components/layouts'
+import { publicRoutes, privateRoutes } from './routes'
+import authAtom, { TAuth } from './atoms/authAtom'
+import Middleware from './middleware/Middleware'
+import RenderRoutes from './utills/renderRoute'
 
 function App() {
-    return (
-        <Routes>
-            {publicRoutes.map((route, idx) => {
-                const Page = route.component
-                let Layout: React.ElementType = Layouts
+    const auth: TAuth = useRecoilValue(authAtom)
+    Middleware({ auth })
 
-                if (route.layout) {
-                    Layout = route.layout
-                } else if (route.layout === null) {
-                    Layout = Fragment
-                }
-
-                return (
-                    <Route
-                        key={idx}
-                        path={route.path}
-                        element={
-                            <Container minW={'full'}>
-                                <Layout>
-                                    <Page />
-                                </Layout>
-                            </Container>
-                        }
-                    />
-                )
-            })}
-        </Routes>
-    )
+    return <RenderRoutes routes={auth.isAuthenticated && auth.user ? privateRoutes : publicRoutes} />
 }
 
 export default App

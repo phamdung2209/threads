@@ -1,6 +1,7 @@
 import express, { Request, Response } from 'express'
 import passport from 'passport'
-import { login, signup, logout } from '../controllers/auth.controller'
+import { login, signup, logout, authMe } from '../controllers/auth.controller'
+import protectedRoute from '../middlewares/protectedRoute'
 
 const router = express.Router()
 
@@ -26,5 +27,8 @@ router.get(
 router.post('/signup', signup)
 router.post('/login', login)
 router.post('/logout', logout)
+
+// auth me
+router.get('/me', authMe)
 
 export default router

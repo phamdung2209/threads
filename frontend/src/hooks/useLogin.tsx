@@ -34,6 +34,8 @@ const useLogin = () => {
             console.log('res', res)
 
             setAuth({ isAuthenticated: true, user: res })
+
+            toast.success('Logged in successfully')
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
         } catch (error: any) {
             toast.error(error.message)

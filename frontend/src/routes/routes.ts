@@ -5,8 +5,9 @@ import Login from '../pages/Login'
 import Signup from '../pages/Signup'
 import UserPage from '../pages/UserPage'
 import PostPage from '../pages/PostPage'
+import Home from '../pages/Home'
 
-type TRoute = {
+export type TRoute = {
     path: string
     component: React.FC
     layout?: React.FC | null
@@ -15,10 +16,13 @@ type TRoute = {
 const publicRoutes: TRoute = [
     { path: config.routes.login, component: Login, layout: null },
     { path: config.routes.signup, component: Signup, layout: null },
+]
+
+const privateRoutes: TRoute = [{ path: config.routes.home, component: Home }]
+
+const accessibleRoutes: TRoute = [
     { path: config.routes.profile, component: UserPage },
     { path: config.routes.post, component: PostPage },
 ]
 
-const privateRoutes: TRoute = []
-
-export { publicRoutes, privateRoutes }
+export { publicRoutes, privateRoutes, accessibleRoutes }

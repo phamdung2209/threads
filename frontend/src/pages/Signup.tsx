@@ -1,113 +1,114 @@
-import {
-    Box,
-    Button,
-    Checkbox,
-    Divider,
-    FormControl,
-    HStack,
-    Heading,
-    Input,
-    Stack,
-    Text,
-    useColorModeValue,
-} from '@chakra-ui/react'
+'use client'
+
+import { useState } from 'react'
+import { Progress, Box, ButtonGroup, Button, Flex, Stack } from '@chakra-ui/react'
 
 import Auth from '../components/Auth'
-import config from '../configs'
 import { OAuthButtonGroup } from '../components/signup-card/OAuthButtonGroup'
-import { Link } from 'react-router-dom'
+import { Form1, Form2, Form3 } from '../components/FormStep'
+import useSignup from '../hooks/useSignup'
+import toast from 'react-hot-toast'
+import { Loader } from '../assets/icons'
 
-const Signup = () => {
+export type TFormValues = {
+    fullname: string
+    username: string
+    email: string
+    password: string
+    confirmPassword: string
+}
+
+export default function Signup() {
+    const [step, setStep] = useState(1)
+    const [progress, setProgress] = useState(33.33)
+    const [values, setValues] = useState<TFormValues>({
+        fullname: '',
+        username: '',
+        email: '',
+        password: '',
+        confirmPassword: '',
+    })
+    const { loading, signup } = useSignup()
+
+    const handleSubmit = async () => {
+        try {
+            await signup(values)
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        } catch (error: any) {
+            toast.error(error.message)
+        }
+    }
+
     return (
         <Auth>
-            <Stack spacing="6">
-                <Stack spacing={{ base: '2', md: '3' }} textAlign="center">
-                    <Heading size={{ base: 'xs', md: 'sm' }}>Sign up with your Threads account</Heading>
-                    <Text color="fg.muted">
-                        Already have an account?{' '}
-                        <Link to={config.routes.login} className="text-[#42a5f5] hover:underline">
-                            Log in
-                        </Link>
-                    </Text>
-                </Stack>
-            </Stack>
-            <Box py={{ base: '5', sm: '8' }} px={{ base: '4', sm: '10' }}>
-                <Stack spacing="6">
-                    <Stack spacing="5">
-                        <FormControl display={'flex'} flexDirection={'column'} gap={3}>
-                            <Input
-                                border={'none'}
-                                id="email"
-                                type="email"
-                                autoComplete="off"
-                                placeholder="Username or email"
-                                bg={useColorModeValue('white', 'gray.dark')}
-                                h={16}
-                                fontSize={'lg'}
-                                _placeholder={{
-                                    color: useColorModeValue('gray.400', '#777'),
+            <Box
+                borderWidth="1px"
+                rounded="lg"
+                shadow="1px 1px 3px rgba(0,0,0,0.3)"
+                maxWidth={800}
+                p={6}
+                m="10px auto"
+                as="form"
+                w={'full'}
+            >
+                <Progress hasStripe value={progress} mb="5%" mx="5%" isAnimated></Progress>
+                {step === 1 ? (
+                    <Form1 values={values} setValues={setValues} />
+                ) : step === 2 ? (
+                    <Form2 values={values} setValues={setValues} />
+                ) : (
+                    <Form3 />
+                )}
+                <ButtonGroup mt="5%" w="100%">
+                    <Flex w="100%" justifyContent="space-between">
+                        <Flex>
+                            <Button
+                                onClick={() => {
+                                    setStep(step - 1)
+                                    setProgress(progress - 33.33)
                                 }}
-                                boxShadow={'md'}
-                                borderRadius={'xl'}
-                                _focusWithin={{
-                                    boxShadow: useColorModeValue('', '0 0 0 1px #f3f5f726'),
+                                isDisabled={step === 1}
+                                colorScheme="teal"
+                                variant="solid"
+                                w="7rem"
+                                mr="5%"
+                            >
+                                Back
+                            </Button>
+                            <Button
+                                w="7rem"
+                                isDisabled={step === 3}
+                                onClick={() => {
+                                    setStep(step + 1)
+                                    if (step === 3) {
+                                        setProgress(100)
+                                    } else {
+                                        setProgress(progress + 33.33)
+                                    }
                                 }}
-                            />
-                            <Input
-                                border={'none'}
-                                id="password"
-                                type="password"
-                                autoComplete="off"
-                                placeholder="Password"
-                                bg={useColorModeValue('white', 'gray.dark')}
-                                h={16}
-                                fontSize={'lg'}
-                                _placeholder={{
-                                    color: useColorModeValue('gray.400', '#777'),
-                                }}
-                                boxShadow={'md'}
-                                borderRadius={'xl'}
-                                _focusWithin={{
-                                    boxShadow: useColorModeValue('', '0 0 0 1px #f3f5f726'),
-                                }}
-                            />
-                        </FormControl>
-                    </Stack>
-                    <HStack justify="space-between">
-                        <Checkbox defaultChecked color={'#777'}>
-                            Remember me
-                        </Checkbox>
-                        <Button _hover={{ textDecor: 'underline' }} variant="text" size="sm" color={'#777'}>
-                            Forgot password?
-                        </Button>
-                    </HStack>
-                    <Stack spacing="6">
-                        <Button
-                            borderRadius="lg"
-                            h={14}
-                            boxShadow="sm"
-                            bg="#fff"
-                            color={'#9F9F9F'}
-                            _hover={{ opacity: 1 }}
-                            cursor={'not-allowed'}
-                            _active={{ opacity: 1 }}
-                            disabled={true}
-                        >
-                            Sign up
-                        </Button>
-                        <HStack>
-                            <Divider />
-                            <Text textStyle="sm" whiteSpace="nowrap" color={useColorModeValue('gray.400', '#777')}>
-                                or continue with
-                            </Text>
-                            <Divider />
-                        </HStack>
-                        <OAuthButtonGroup />
-                    </Stack>
+                                colorScheme="teal"
+                                variant="outline"
+                            >
+                                Next
+                            </Button>
+                        </Flex>
+                        {step === 3 ? (
+                            <Button
+                                w="7rem"
+                                colorScheme="red"
+                                variant="solid"
+                                onClick={handleSubmit}
+                                disabled={loading}
+                            >
+                                {loading ? <Loader className="animate-spin size-7 text-gray-600" /> : 'Submit'}
+                            </Button>
+                        ) : null}
+                    </Flex>
+                </ButtonGroup>
+                <Stack marginTop={5}>
+                    <OAuthButtonGroup />
                 </Stack>
             </Box>
         </Auth>
     )
 }
-
-export default Signup
