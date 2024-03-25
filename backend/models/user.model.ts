@@ -1,8 +1,8 @@
 import mongoose from 'mongoose'
 
 export interface IUserDocument extends mongoose.Document {
-    username: string
-    password: string
+    username?: string
+    password?: string
     email: string
     name?: string
     profilePic?: string
@@ -10,6 +10,7 @@ export interface IUserDocument extends mongoose.Document {
     following?: string[]
     bio?: string
     tick: boolean
+    provider?: 'google' | 'github' | null
     createdAt: Date
     updatedAt: Date
 }
@@ -18,14 +19,14 @@ const userSchema: mongoose.Schema = new mongoose.Schema<IUserDocument>(
     {
         username: {
             type: String,
-            required: true,
+            default: null,
             unique: true,
             trim: true,
             minlength: 3,
         },
         password: {
             type: String,
-            required: true,
+            default: null,
             trim: true,
             minlength: 6,
         },
@@ -61,6 +62,10 @@ const userSchema: mongoose.Schema = new mongoose.Schema<IUserDocument>(
         tick: {
             type: Boolean,
             default: false,
+        },
+        provider: {
+            type: String,
+            default: null,
         },
     },
     { timestamps: true },

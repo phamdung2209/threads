@@ -1,4 +1,4 @@
-import { Request, Response } from 'express'
+import { Request, Response, response } from 'express'
 import User, { IUserDocument } from '../models/user.model'
 import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
@@ -44,7 +44,7 @@ export const signup = async (req: Request, res: Response) => {
         await newUser.save()
 
         if (newUser) {
-            generateJwt(newUser._id, res)
+            generateJwt(newUser._id as string, res)
             return res.json({
                 message: 'User created successfully',
             })
@@ -81,13 +81,12 @@ export const login = async (req: Request, res: Response) => {
         }
 
         const isPasswordCorrect = await bcrypt.compare(password, (user?.password as string) ?? '')
-        console.log('isPasswordCorrect: ', isPasswordCorrect)
 
         if (!isPasswordCorrect) {
             return res.json({ error: 'Email/Username or password is incorrect' })
         }
 
-        generateJwt(user._id, res)
+        generateJwt(user._id as string, res)
 
         return res.json({
             message: 'User logged in successfully',

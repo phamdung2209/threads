@@ -9,12 +9,12 @@ export const get = async (path: string, options = {}) => {
     return res.data
 }
 
-export const post = async (path: string, body: unknown, options = {}) => {
+export const post = async (path: string, body?: unknown, options = {}) => {
     const res = await request.post(path, body, options)
     return res.data
 }
 
-export const put = async (path: string, body: unknown, options = {}) => {
+export const put = async (path: string, body?: unknown, options = {}) => {
     const res = await request.put(path, body, options)
     return res.data
 }

@@ -26,7 +26,7 @@ const useSignup = () => {
             if (res.error) throw new Error(res.error)
 
             // redirect to login page
-            navigate(config.routes.login)
+            navigate(config.routes.home)
 
             toast.success('Signed up successfully')
             // eslint-disable-next-line @typescript-eslint/no-explicit-any

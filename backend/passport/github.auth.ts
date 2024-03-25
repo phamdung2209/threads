@@ -1,6 +1,7 @@
 import { Strategy as GitHubStrategy } from 'passport-github2'
 import passport from 'passport'
 import dotenv from 'dotenv'
+import User, { IUserDocument } from '../models/user.model'
 
 dotenv.config()
 
@@ -13,12 +14,11 @@ passport.deserializeUser(function (obj: any, done) {
 })
 
 type TProfile = {
-    id: string
-    displayName: string
     username: string
-    profileUrl: string
-    emails: Array<{ value: string }>
-    photos: Array<{ value: string }>
+    displayName: string
+    photos: { value: string }[]
+    emails: { value: string }[]
+    provider: string
 }
 
 passport.use(
@@ -29,11 +29,38 @@ passport.use(
             callbackURL: process.env.AUTH_GITHUB_CALLBACK_URL as string,
             scope: ['user:email'],
         },
-        (accessToken: string, refreshToken: string, profile: any, done: any) => {
-            console.log('profile: ', profile)
+        async (accessToken: string, refreshToken: string, profile: any, done: any) => {
+            const {
+                username,
+                displayName: name,
+                photos: [{ value: profilePic }],
+                emails: [{ value: email }],
+                provider,
+            } = profile as TProfile
 
-            // const {} = profile as TProfile
-            return done(null, profile)
+            try {
+                const user: IUserDocument | null = await User.findOne({
+                    $or: [{ email }, { username }],
+                })
+
+                if (!user) {
+                    const newUser: IUserDocument = await User.create({
+                        name,
+                        email,
+                        username,
+                        profilePic,
+                        provider,
+                    })
+
+                    await newUser.save()
+                    return done(null, newUser)
+                } else {
+                    return done(null, user)
+                }
+            } catch (error: any) {
+                console.log('Error in github auth: ', error.message)
+                return done(error)
+            }
         },
     ),
 )

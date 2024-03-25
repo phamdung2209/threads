@@ -20,7 +20,7 @@ const Middleware = ({ auth }: { auth: TAuth }) => {
         if (!auth.isAuthenticated && !auth.user && isPrivateRoute) {
             navigate(config.routes.login)
         }
-    }, [auth, location, navigate, isAuthPage, isPrivateRoute])
+    }, [auth, location.pathname, navigate, isAuthPage, isPrivateRoute])
 }
 
 export default Middleware
