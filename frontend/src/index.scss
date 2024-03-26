@@ -20,6 +20,28 @@
     animation: spin 1s linear infinite;
 }
 
+// Header 
+.header {
+    .nav-item {
+        span {
+            scale: 0.7;
+            opacity: 0;
+            transition: all 0.15s ease-in-out;
+        }
+
+        &:hover {
+            span {
+                scale: 1;
+                opacity: 1;
+            }
+        }
+
+        &:active {
+            scale: 0.86;
+        }
+    }
+}
+
 @keyframes spin {
     0% {
         transform: rotate(0deg);

@@ -4,6 +4,7 @@ import { ChakraProvider, ColorModeScript, extendTheme } from '@chakra-ui/react'
 import { mode } from '@chakra-ui/theme-tools'
 import { BrowserRouter as Router } from 'react-router-dom'
 import { Toaster } from 'react-hot-toast'
+import 'tippy.js/dist/tippy.css'
 
 import App from './App.tsx'
 import './index.scss'

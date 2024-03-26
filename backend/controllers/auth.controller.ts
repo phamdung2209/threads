@@ -1,4 +1,4 @@
-import { Request, Response, response } from 'express'
+import { Request, Response } from 'express'
 import User, { IUserDocument } from '../models/user.model'
 import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'

@@ -1,3 +1,5 @@
+import { forwardRef } from 'react'
+
 type SVGProps = React.SVGProps<SVGSVGElement>
 
 export const Heart = (props: SVGProps) => (
@@ -160,3 +162,18 @@ export const Loader = (props: SVGProps) => (
         ></rect>
     </svg>
 )
+
+export const Bar = forwardRef<SVGSVGElement, SVGProps>((props, ref) => (
+    <svg
+        ref={ref}
+        aria-label="More"
+        role="img"
+        viewBox="0 0 24 24"
+        style={{ fill: 'currentColor', height: '24px', width: '24px' }}
+        {...props}
+    >
+        <title>More</title>
+        <rect width={21} height={2.5} rx="1.25" x="3" y="7"></rect>
+        <rect width={14} height={2.5} rx="1.25" x="10" y="15"></rect>
+    </svg>
+))
