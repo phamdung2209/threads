@@ -1,9 +1,9 @@
 import { useState } from 'react'
-import toast from 'react-hot-toast'
 import { useSetRecoilState } from 'recoil'
 
 import * as request from '../utills/httpRequest'
 import authAtom from '../atoms/authAtom'
+import { Text, useToast } from '@chakra-ui/react'
 
 type TLoginUser = {
     username: string
@@ -15,9 +15,10 @@ type TLoginUser = {
 const useLogin = () => {
     const [loading, setLoading] = useState<boolean>(false)
     const setAuth = useSetRecoilState(authAtom)
+    const toast = useToast()
 
     const login = async ({ username, email, password, confirmPassword }: TLoginUser) => {
-        const success: boolean = handleInputError({ username, email, password })
+        const success: boolean = handleInputError({ username, email, password }, toast)
         if (!success) return
         setLoading(true)
         try {
@@ -35,10 +36,40 @@ const useLogin = () => {
 
             setAuth({ isAuthenticated: true, user: res })
 
-            toast.success('Logged in successfully')
+            toast({
+                position: 'top',
+                render: () => (
+                    <Text
+                        color={'white'}
+                        bg={'#545454eb'}
+                        padding={3}
+                        borderRadius={4}
+                        display={'flex'}
+                        alignItems={'center'}
+                        justifyContent={'center'}
+                    >
+                        Logged in successfully
+                    </Text>
+                ),
+            })
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
         } catch (error: any) {
-            toast.error(error.message)
+            toast({
+                position: 'top',
+                render: () => (
+                    <Text
+                        color={'white'}
+                        bg={'#545454eb'}
+                        padding={3}
+                        borderRadius={4}
+                        display={'flex'}
+                        alignItems={'center'}
+                        justifyContent={'center'}
+                    >
+                        {error.message}
+                    </Text>
+                ),
+            })
         } finally {
             setLoading(false)
         }
@@ -49,13 +80,44 @@ const useLogin = () => {
 
 export default useLogin
 
-const handleInputError = ({ username, email, password }: TLoginUser) => {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const handleInputError = ({ username, email, password }: TLoginUser, toast?: any) => {
     if (!username || !email || !password) {
-        toast.error('Please fill all the fields')
+        toast({
+            position: 'top',
+            render: () => (
+                <Text
+                    color={'white'}
+                    bg={'#545454eb'}
+                    padding={3}
+                    borderRadius={4}
+                    display={'flex'}
+                    alignItems={'center'}
+                    justifyContent={'center'}
+                >
+                    Please fill all the fields
+                </Text>
+            ),
+        })
         return false
     }
     if (password.length < 6) {
-        toast.error('Password must be at least 6 characters long')
+        toast({
+            position: 'top',
+            render: () => (
+                <Text
+                    color={'white'}
+                    bg={'#545454eb'}
+                    padding={3}
+                    borderRadius={4}
+                    display={'flex'}
+                    alignItems={'center'}
+                    justifyContent={'center'}
+                >
+                    Password must be at least 6 characters long
+                </Text>
+            ),
+        })
         return false
     }
     return true

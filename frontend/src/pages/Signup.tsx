@@ -1,13 +1,12 @@
 'use client'
 
 import { useState } from 'react'
-import { Progress, Box, ButtonGroup, Button, Flex, Stack } from '@chakra-ui/react'
+import { Progress, Box, ButtonGroup, Button, Flex, Stack, useToast, Text } from '@chakra-ui/react'
 
 import Auth from '../components/Auth'
 import { OAuthButtonGroup } from '../components/signup-card/OAuthButtonGroup'
 import { Form1, Form2, Form3 } from '../components/FormStep'
 import useSignup from '../hooks/useSignup'
-import toast from 'react-hot-toast'
 import { Loader } from '../assets/icons'
 
 export type TFormValues = {
@@ -19,6 +18,7 @@ export type TFormValues = {
 }
 
 export default function Signup() {
+    const toast = useToast()
     const [step, setStep] = useState(1)
     const [progress, setProgress] = useState(33.33)
     const [values, setValues] = useState<TFormValues>({
@@ -35,7 +35,22 @@ export default function Signup() {
             await signup(values)
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
         } catch (error: any) {
-            toast.error(error.message)
+            toast({
+                position: 'top',
+                render: () => (
+                    <Text
+                        color={'white'}
+                        bg={'#545454eb'}
+                        padding={3}
+                        borderRadius={4}
+                        display={'flex'}
+                        alignItems={'center'}
+                        justifyContent={'center'}
+                    >
+                        {error.message}
+                    </Text>
+                ),
+            })
         }
     }
 

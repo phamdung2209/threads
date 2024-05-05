@@ -45,18 +45,18 @@ export const PRIMARY_HEADER_BUTTONS: TPrimaryHeaderButton = [
         icon: <GrHomeRounded cursor={'pointer'} className="w-6 h-6" />,
     },
     {
-        to: config.routes.home,
+        to: config.routes.notFound,
         icon: <FiSearch cursor={'pointer'} className="w-6 h-6" />,
     },
     {
         icon: <FaRegEdit cursor={'pointer'} className="w-6 h-6" />,
     },
     {
-        to: config.routes.home,
+        to: config.routes.profile,
         icon: <FaRegHeart cursor={'pointer'} className="w-6 h-6" />,
     },
     {
-        to: config.routes.home,
+        to: config.routes.post,
         icon: <FaRegUser cursor={'pointer'} className="w-6 h-6" />,
     },
 ]

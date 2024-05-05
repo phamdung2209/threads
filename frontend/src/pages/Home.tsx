@@ -1,9 +1,10 @@
+import { Box } from '@chakra-ui/react'
 import UserHeader from '../components/user-page/UserHeader'
 import UserPost from '../components/user-page/UserPost'
 
 const Home = () => {
     return (
-        <div>
+        <Box>
             <UserHeader />
             <UserPost
                 likes={1232}
@@ -37,7 +38,7 @@ const Home = () => {
                     "I'm excited to announce that we’ve completed our acquisition of Giphy and are excited to start sharing more about our plans soon."
                 }
             />
-        </div>
+        </Box>
     )
 }
 

@@ -1,9 +1,28 @@
+import { NavLink } from 'react-router-dom'
 import UserHeader from '../components/user-page/UserHeader'
 import UserPost from '../components/user-page/UserPost'
+import { Flex } from '@chakra-ui/react'
 
 const UserPage = () => {
     return (
         <div>
+            <Flex gap={4}>
+                <NavLink to="/1" className={(nav) => (nav.isActive ? 'bg-red-600' : '')}>
+                    Profile
+                </NavLink>
+                <NavLink
+                    to="/2"
+                    style={({ isActive }) => {
+                        return {
+                            background: isActive ? 'red' : '',
+                        }
+                    }}
+                >
+                    Profile
+                </NavLink>
+                <NavLink to="/3">Profile</NavLink>
+                <NavLink to="/4">Profile</NavLink>
+            </Flex>
             <UserHeader />
             <UserPost
                 likes={1232}

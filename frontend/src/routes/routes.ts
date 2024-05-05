@@ -6,6 +6,7 @@ import Signup from '../pages/Signup'
 import UserPage from '../pages/UserPage'
 import PostPage from '../pages/PostPage'
 import Home from '../pages/Home'
+import UpdateProfile from '../pages/UpdateProfile'
 
 export type TRoute = {
     path: string
@@ -18,7 +19,10 @@ const publicRoutes: TRoute = [
     { path: config.routes.signup, component: Signup, layout: null },
 ]
 
-const privateRoutes: TRoute = [{ path: config.routes.home, component: Home }]
+const privateRoutes: TRoute = [
+    { path: config.routes.home, component: Home },
+    { path: config.routes.updateProfile, component: UpdateProfile },
+]
 
 const accessibleRoutes: TRoute = [
     { path: config.routes.profile, component: UserPage },

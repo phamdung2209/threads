@@ -10,18 +10,19 @@ import {
     Stack,
     Text,
     useColorModeValue,
+    useToast,
 } from '@chakra-ui/react'
 
 import config from '../configs'
 import { OAuthButtonGroup } from '../components/signup-card/OAuthButtonGroup'
 import Auth from '../components/Auth'
 import { Link } from 'react-router-dom'
-import toast from 'react-hot-toast'
 import useLogin from '../hooks/useLogin'
 import { useState } from 'react'
 import { Loader } from '../assets/icons'
 
 const Login = () => {
+    const toast = useToast()
     const [valueLogin, setValueLogin] = useState<{
         username: string
         email: string
@@ -44,7 +45,22 @@ const Login = () => {
             })
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
         } catch (error: any) {
-            toast.error(error.message)
+            toast({
+                position: 'top',
+                render: () => (
+                    <Text
+                        color={'white'}
+                        bg={'#545454eb'}
+                        padding={3}
+                        borderRadius={4}
+                        display={'flex'}
+                        alignItems={'center'}
+                        justifyContent={'center'}
+                    >
+                        {error.message}
+                    </Text>
+                ),
+            })
         }
     }
 

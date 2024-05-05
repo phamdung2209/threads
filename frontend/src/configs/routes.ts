@@ -5,6 +5,7 @@ type TRouteConfig = {
     profile: string
     post: string
     notFound: string
+    updateProfile: string
 }
 
 const routesConfig: TRouteConfig = {
@@ -14,6 +15,7 @@ const routesConfig: TRouteConfig = {
     profile: '/:username',
     post: '/:username/post/:pid',
     notFound: '/404',
+    updateProfile: '/update-profile',
 }
 
 export default routesConfig

@@ -1,5 +1,5 @@
 import { Box, Flex, Image, useColorMode, useColorModeValue } from '@chakra-ui/react'
-import { Link } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 import Tippy from '@tippyjs/react/headless'
 
 import { Bar, Loader } from '../assets/icons'
@@ -11,6 +11,7 @@ import Buttons from './Buttons'
 const Header = () => {
     const { colorMode, toggleColorMode } = useColorMode()
     const { loading, logout } = useLogout()
+    // const location = useLocation()
     const handleTitle = (title: string) => {
         if (title === 'Log out') {
             return loading ? <Loader className="animate-spin size-6" /> : title
@@ -56,6 +57,7 @@ const Header = () => {
             <Flex alignItems={'center'} gap={3}>
                 {PRIMARY_HEADER_BUTTONS.map((item, idx) => {
                     let Comp: React.ElementType = Box
+
                     const props = {
                         to: item.to,
                     } as {
@@ -70,8 +72,8 @@ const Header = () => {
                     return (
                         <Comp
                             {...props}
-                            key={idx}
-                            className="nav-item cursor-pointer rounded-lg text-[#4D4D4D] px-8 py-5 transition-all duration-300 ease-in-out relative flex items-center justify-center"
+                            key={idx + Math.random()}
+                            className={`nav-item cursor-pointer rounded-lg text-[#4D4D4D] px-8 py-5 transition-all duration-300 ease-in-out relative flex items-center justify-center`}
                         >
                             <span className="bg-[#ffffff0d] rounded-lg absolute px-11 py-8"></span>
                             {item.icon}

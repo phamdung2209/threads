@@ -1,12 +1,13 @@
 import { useState } from 'react'
 import * as request from '../utills/httpRequest'
-import toast from 'react-hot-toast'
 import { useSetRecoilState } from 'recoil'
 import authAtom from '../atoms/authAtom'
+import { Text, useToast } from '@chakra-ui/react'
 
 const useLogout = () => {
     const [loading, setLoading] = useState<boolean>(false)
     const setAuth = useSetRecoilState(authAtom)
+    const toast = useToast()
 
     const logout = async () => {
         setLoading(true)
@@ -18,10 +19,40 @@ const useLogout = () => {
                 user: null,
             })
 
-            toast.success('Logged out successfully')
+            toast({
+                position: 'top',
+                render: () => (
+                    <Text
+                        color={'white'}
+                        bg={'#545454eb'}
+                        padding={3}
+                        borderRadius={4}
+                        display={'flex'}
+                        alignItems={'center'}
+                        justifyContent={'center'}
+                    >
+                        Logged out successfully
+                    </Text>
+                ),
+            })
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
         } catch (error: any) {
-            toast.error(error.message)
+            toast({
+                position: 'top',
+                render: () => (
+                    <Text
+                        color={'white'}
+                        bg={'#545454eb'}
+                        padding={3}
+                        borderRadius={4}
+                        display={'flex'}
+                        alignItems={'center'}
+                        justifyContent={'center'}
+                    >
+                        {error.message}
+                    </Text>
+                ),
+            })
         } finally {
             setLoading(false)
         }

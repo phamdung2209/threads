@@ -19,7 +19,23 @@ const UserHeader = () => {
     const toast = useToast()
     const copyUrl = () => {
         navigator.clipboard.writeText(window.location.href).then(() => {
-            toast({ description: 'Copied', position: 'top-right' })
+            toast({
+                position: 'top',
+
+                render: () => (
+                    <Text
+                        color={'white'}
+                        bg={'#545454eb'}
+                        padding={3}
+                        borderRadius={4}
+                        display={'flex'}
+                        alignItems={'center'}
+                        justifyContent={'center'}
+                    >
+                        Copied
+                    </Text>
+                ),
+            })
         })
     }
 
